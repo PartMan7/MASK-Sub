@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<HTML>
+	<HEAD>
+		<TITLE>
+			MASK TASK
+		</TITLE>
+		<STYLE>
+			* {
+				box-sizing: border-box;
+			}
+
+			input[type=text], select, {
+				width: 100%;
+				padding: 12px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				resize: vertical;
+			}
+
+			button {
+				background-color: #FFA500;
+				color: white;
+				padding: 12px 20px;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				float: right;
+				opacity: 1;
+			}
+
+			button:hover {
+				background-color: #E69500;
+				opacity: 1;
+			}
+
+			.container {
+				border-radius: 5px;
+				background-color: rgba(242, 242, 242, 0.8);
+				padding: 20px;
+				/*opacity: 0.7;*/
+			}
+		</STYLE>
+	</HEAD>
+	<BODY style="background-image:url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0d70e1b8-46e8-4fdf-a494-df2a1fdbb52f/ddgb3ld-7f67137b-ca1b-4f8a-9464-b0846c0226e8.jpg/v1/fill/w_1280,h_720,q_75,strp/zenitsu_agatsuma_by_ftnyuni_ddgb3ld-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvMGQ3MGUxYjgtNDZlOC00ZmRmLWE0OTQtZGYyYTFmZGJiNTJmXC9kZGdiM2xkLTdmNjcxMzdiLWNhMWItNGY4YS05NDY0LWIwODQ2YzAyMjZlOC5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.1jZI8hpSvpTHOxDSpMF0CX5sB3cOdU0EypStn5ktAj0);">
+		<SCRIPT>
+			window.onload = () => {
+				updateDes();
+			}
+			updateDes = () => {
+				let opt = document.getElementById('designation').value;
+				switch (opt) {
+					case 'none': {
+						document.getElementById('professor').style.display = 'none';
+						document.getElementById('student').style.display = 'none';
+						break;
+					}
+					case 'professor': {
+						document.getElementById('professor').style.display = 'inline';
+						document.getElementById('student').style.display = 'none';
+						break;
+					}
+					case 'student': {
+						document.getElementById('professor').style.display = 'none';
+						document.getElementById('student').style.display = 'inline';
+						break;
+					}
+				}
+			}
+			validateName = () => {
+				let name = document.getElementById('name').value;
+				if (name.length < 2) return false;
+				else return name;
+			}
+			validateEmail = () => {
+				let email = document.getElementById('email').value;
+				if (/^[\w\.\-\_]*\w\@[\w\-]+\.[a-zA-Z]{2,}$/.test(email)) return email;
+				else return false;
+			}
+			validateDesignation = () => {
+				let des = document.getElementById('designation').value;
+				if (des == 'none') return false;
+				else return des;
+			}
+			validateGender = () => {
+				if (document.getElementById('male').checked) return 'M';
+				if (document.getElementById('female').checked) return 'F';
+				if (document.getElementById('other').checked) return 'O';
+				return false;
+			}
+			validateDesignationOptions = () => {
+				let des = validateDesignation();
+				if (!des) return false;
+				switch (des) {
+					case 'professor': {
+						let ID = document.getElementById('ID').value;
+						if (!/^.{8,}$/.test(ID)) return false;
+						return {designation: des, id: ID, dept: (document.getElementById('profDept').value || null)};
+					}
+					case 'student': {
+						let ID = document.getElementById('Roll').value;
+						if (!/^.{8,}$/.test(ID)) return false;
+						return {designation: des, id: ID, dept: (document.getElementById('studDept').value || null)};
+					}
+					default: return false;
+				}
+			}
+			validate = () => {
+				let name = validateName(), email = validateEmail(), gender = validateGender(), des = validateDesignation(), opts = validateDesignationOptions();
+				if (!name) return {e: 'Invalid name.'};
+				if (!email) return {e: 'Invalid email ID.'};
+				if (!gender) return {e: 'Gender not selected.'};
+				if (!des) return {e: 'Designation not selected.'};
+				if (!opts) return {e: 'Invalid ID.'};
+				return {name: name, email: email, gender: gender, des: des, dept: opts.dept, id: opts.id};
+			}
+			submit = () => {
+				let out = validate();
+				if (out.e) return alert(out.e);
+				return alert(`Data validated!\nReceived data:\n${JSON.stringify(out, null, 2)}`);
+			}
+		</SCRIPT>
+		<CENTER>
+			<BR/>
+			<BR/>
+			<DIV class="container">
+				<BR/>
+				<FORM id="input">
+					Name: <INPUT type="text" id="name" placeholder="Your name.."/><BR/>
+					Email ID: <INPUT type="text" id="email" placeholder="Your email ID.."/><BR/>
+					Designation: <SELECT id="designation" onchange="updateDes()">
+						<OPTION value="none" selected></OPTION>
+						<OPTION value="professor">Professor</OPTION>
+						<OPTION value="student">Student</OPTION>
+					</SELECT>
+					<BR/>
+					Gender: 
+					<INPUT type="radio" id="male" name="gender"/>Male
+					<INPUT type="radio" id="female" name="gender"/>Female
+					<INPUT type="radio" id="other" name="gender"/>Other
+					<BR/>
+					<DIV id="professor">
+						Employee ID: <INPUT type="text" id="ID" placeholder="Your Employee ID.."/>
+						<BR/>
+						Department: <INPUT type="text" id="profDept" placeholder="Your Department.."/>
+						<BR/>
+					</DIV>
+					<DIV id="student">
+						Roll Number: <INPUT type="text" id="Roll" placeholder="Your Intitute Roll Number.."/>
+						<BR/>
+						Department: <INPUT type="text" id="studDept" placeholder="Your Department.."/>
+						<BR/>
+					</DIV>
+					<BR/>
+					<BUTTON style="opacity: 1;" onclick="submit()">Submit</BUTTON>
+					<BR/>
+					<BR/>
+				</FORM>
+			</DIV>
+			<!Credits to ftnyuni on DeviantArt for the background>
+		</CENTER>
+	</BODY>
+</HTML>
